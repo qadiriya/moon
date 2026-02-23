@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Марго ищет котенка — Тёмная RPG</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:black;
+    color:#e6e6e6;
+    overflow:hidden;
+}
+#bg{
+    position:fixed;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    filter:brightness(0.35);
+    transition:1s;
+}
+#ui{
+    position:relative;
+    z-index:2;
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+h1{text-align:center; color:#ff4d6d;}
+
+.panel{
+    background:rgba(0,0,0,0.75);
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.bar{height:14px;background:#333;border-radius:8px;overflow:hidden;}
+.inner{height:100%;transition:0.4s;}
+.hp{background:#ff4d6d;}
+.mp{background:#4da6ff;}
+.energy{background:#9acd32;}
+.exp{background:#ffd700;}
+
+button{
+    padding:8px 14px;
+    margin:5px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#5a189a;
+    color:white;
+    transition:0.2s;
+}
+button:hover{transform:scale(1.05);background:#7b2cbf;}
+</style>
+</head>
+
+<body>
+<div id="bg"></div>
+
+<div id="ui">
+<h1>Марго ищет котенка</h1>
+
+<div class="panel">
+Уровень: <span id="lvl"></span> |
+Золото: <span id="gold"></span>
+
+<div>❤️ HP<div class="bar"><div id="hp" class="inner hp"></div></div></div>
+<div>🔮 MP<div class="bar"><div id="mp" class="inner mp"></div></div></div>
+<div>⚡ Энергия<div class="bar"><div id="energy" class="inner energy"></div></div></div>
+<div>⭐ Опыт<div class="bar"><div id="exp" class="inner exp"></div></div></div>
+</div>
+
+<div id="story" class="panel"></div>
+<div id="choices"></div>
+<div id="log" class="panel"></div>
+
+</div>
+
+<script>
+let player={
+level:1, exp:0, nextExp:100,
+hp:120, maxHp:120,
+mp:80, maxMp:80,
+energy:100,
+gold:25,
+class:"",
+chapter:1,
+corruption:0
+};
+
+function updateUI(){
+lvl.innerText=player.level;
+gold.innerText=player.gold;
+hp.style.width=(player.hp/player.maxHp*100)+"%";
+mp.style.width=(player.mp/player.maxMp*100)+"%";
+energy.style.width=player.energy+"%";
+exp.style.width=(player.exp/player.nextExp*100)+"%";
+}
+
+function addChoice(text,action){
+let btn=document.createElement("button");
+btn.textContent=text;
+btn.onclick=action;
+choices.appendChild(btn);
+}
+
+function clearChoices(){choices.innerHTML="";}
+function log(msg){document.getElementById("log").innerHTML=msg;}
+function rand(n){return Math.floor(Math.random()*n);}
+function changeBg(url){bg.style.backgroundImage=`url(${url})`;}
+
+function gainExp(x){
+player.exp+=x;
+if(player.exp>=player.nextExp){
+player.exp=0;
+player.level++;
+player.maxHp+=25;
+player.maxMp+=15;
+player.hp=player.maxHp;
+player.mp=player.maxMp;
+player.nextExp+=75;
+log("Ты стала сильнее... Но тьма тоже растёт.");
+}
+updateUI();
+}
+
+function chooseClass(){
+changeBg("https://images.unsplash.com/photo-1503264116251-35a269479413");
+story.innerHTML="Выбери путь магии. В этом городе свет не всегда побеждает тьму.";
+clearChoices();
+
+addChoice("✨ Маг света",()=>{
+player.class="Свет";
+player.maxHp+=40;
+player.hp=player.maxHp;
+startGame();
+});
+
+addChoice("🌙 Ведьма луны",()=>{
+player.class="Луна";
+player.maxMp+=40;
+player.mp=player.maxMp;
+startGame();
+});
+
+addChoice("🔥 Пламя бездны",()=>{
+player.class="Огонь";
+player.corruption+=5;
+startGame();
+});
+}
+
+function startGame(){
+changeBg("https://images.unsplash.com/photo-1467269204594-9661b134dd2b");
+story.innerHTML="Глава I. Исчезновение.<br><br>Котёнок исчез в ночь, когда над городом вспыхнул кровавый шторм.";
+clearChoices();
+addChoice("Исследовать город",cityHub);
+updateUI();
+}
+
+function cityHub(){
+changeBg("https://images.unsplash.com/photo-1467269204594-9661b134dd2b");
+story.innerHTML="Тьма сгущается. Куда отправиться?";
+clearChoices();
+addChoice("Башня магов",()=>explore("Башня магов"));
+addChoice("Заражённый парк",()=>explore("Парк"));
+addChoice("Порт теней",()=>explore("Порт"));
+addChoice("Подземный разлом",()=>battle("Страж Разлома",200,30,true));
+}
+
+function explore(place){
+changeBg("https://images.unsplash.com/photo-1501785888041-af3ef285b470");
+story.innerHTML="Ты входишь в "+place+". Воздух холодный и странный.";
+clearChoices();
+
+let r=rand(4);
+if(r===0){ battle("Теневой дух",100,20,false); return; }
+if(r===1){ player.gold+=15; log("Ты находишь тёмные монеты."); }
+if(r===2){ player.energy-=20; log("Шёпот сводит тебя с ума."); }
+if(r===3){ gainExp(30); log("Ты очищаешь заражённый символ."); }
+
+addChoice("Вернуться",cityHub);
+updateUI();
+}
+
+function battle(name,enemyHp,damage,boss=false){
+story.innerHTML="⚔ Бой: "+name;
+clearChoices();
+
+function enemyTurn(){
+player.hp-=damage;
+if(player.hp<=0){ endingBad(); }
+updateUI();
+}
+
+function attack(){
+enemyHp-=25+player.level*5;
+if(enemyHp<=0){ victory(); }
+else{ enemyTurn(); }
+}
+
+function heavySpell(){
+if(player.mp<30){ log("Недостаточно маны."); return; }
+player.mp-=30;
+enemyHp-=60;
+player.corruption+=2;
+if(enemyHp<=0){ victory(); }
+else{ enemyTurn(); }
+updateUI();
+}
+
+function heal(){
+if(player.mp<20){ log("Недостаточно маны."); return; }
+player.mp-=20;
+player.hp+=40;
+if(player.hp>player.maxHp) player.hp=player.maxHp;
+enemyTurn();
+updateUI();
+}
+
+function victory(){
+gainExp(boss?150:60);
+player.gold+=boss?50:20;
+if(boss){
+story.innerHTML="Ты разрушила разлом... но чувствуешь, как тьма коснулась души.";
+player.chapter=2;
+}
+else story.innerHTML=name+" повержен.";
+clearChoices();
+addChoice("Продолжить",cityHub);
+}
+
+addChoice("Атака",attack);
+addChoice("Мощное заклинание (-30 MP)",heavySpell);
+addChoice("Исцеление (-20 MP)",heal);
+}
+
+function endingBad(){
+story.innerHTML="Тьма поглотила Марго. Город остался без надежды.";
+clearChoices();
+addChoice("Начать заново",()=>location.reload());
+}
+
+updateUI();
+chooseClass();
+</script>
+
+</body>
+</html>
