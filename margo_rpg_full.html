@@ -104,7 +104,7 @@ btn.onclick=action;
 choices.appendChild(btn);
 }
 
-function clearChoices(){choices.innerHTML="";}
+function clearChoices(){choices.innerHTML="";document.getElementById("log").innerHTML="";}
 function log(msg){document.getElementById("log").innerHTML=msg;}
 function rand(n){return Math.floor(Math.random()*n);}
 function changeBg(url){bg.style.backgroundImage=`url(${url})`;}
@@ -119,9 +119,9 @@ player.maxMp+=15;
 player.hp=player.maxHp;
 player.mp=player.maxMp;
 player.nextExp+=75;
-log("Ты стала сильнее... Но тьма тоже растёт.");
+log("Ты стала сильнее... Но тьма тоже растёт."); changeBg("game/bg-pw.jpg");
 }
-updateUI(); changeBg("game/bg-pw.jpg");
+updateUI();
 }
 
 function chooseClass(){
