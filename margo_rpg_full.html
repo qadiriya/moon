@@ -162,19 +162,19 @@ function cityHub(){
 changeBg("game/bg2.jpg");
 story.innerHTML="Тьма сгущается. Куда отправиться?";
 clearChoices();
-addChoice("Башня магов",()=>explore("Башня магов"));
-addChoice("Заражённый парк",()=>explore("Парк"));
-addChoice("Порт теней",()=>explore("Порт"));
-addChoice("Подземный разлом",()=>battle("Страж Разлома",200,30,true));
+addChoice("Башня магов",()=>explore("game/bg-mag.jpg","Башня магов"));
+addChoice("Заражённый парк",()=>explore("game/bg-mag.jpg","Парк"));
+addChoice("Порт теней",()=>explore("game/bg-port.jpg","Порт"));
+addChoice("Подземный разлом",()=>battle("game/bt2.jpg","Страж Разлома",200,30,true));
 }
 
-function explore(place){
-changeBg("game/bg3.jpg");
+function explore(bgpl,place){
+changeBg(bgpl);
 story.innerHTML="Ты входишь в "+place+". Воздух холодный и странный.";
 clearChoices();
 
 let r=rand(4);
-if(r===0){ battle("Теневой дух",100,20,false); return; }
+if(r===0){ battle("game/bt1.jpg","Теневой дух",100,20,false); return; }
 if(r===1){ player.gold+=15; log("Ты находишь тёмные монеты."); }
 if(r===2){ player.energy-=20; log("Шёпот сводит тебя с ума."); }
 if(r===3){ gainExp(30); log("Ты очищаешь заражённый символ."); }
@@ -183,9 +183,9 @@ addChoice("Вернуться",cityHub);
 updateUI();
 }
 
-function battle(name,enemyHp,damage,boss=false){
+function battle(bgbt,name,enemyHp,damage,boss=false){
 story.innerHTML="⚔ Бой: "+name;
-clearChoices(); changeBg("game/bt.jpg");
+clearChoices(); changeBg(bgbt);
 function enemyTurn(){
 player.hp-=damage;
 if(player.hp<=0){ endingBad(); }
