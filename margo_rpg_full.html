@@ -51,7 +51,7 @@ button{
     transition:0.2s;
 }
 button:hover{transform:scale(1.05);background:#7b2cbf;}
-#slde img{width:100%;height:100%;object-fit:fill;visibility:hidden;}
+#slde img{width:100%;height:65vh;object-fit:fill;visibility:hidden;}
 
 </style>
 </head>
@@ -194,8 +194,8 @@ player.hp-=damage;
 if(player.hp<=0){ endingBad(); }
 updateUI();
 }
-
-function attack(){document.getElementById("slde").style.visibility="visible";
+function hide(){document.querySelector("#slde img").style.visibility="hidden";}
+function attack(){document.querySelector("#slde img").style.visibility="visible";setTimeout(hide,2000);
 enemyHp-=25+player.level*5;
 if(enemyHp<=0){ victory(); }
 else{ enemyTurn(); }
