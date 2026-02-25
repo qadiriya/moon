@@ -12,6 +12,7 @@ button:hover{transform:scale(1.05);background:#7b2cbf}
 #ui{position:relative;z-index:2;max-width:1100px;margin:auto;
 padding:5px}
 #slde{width:100%;height:75vh;object-fit:fill;display:none}
+#thund{width:100%;height:75vh;object-fit:fill;display:none}
 #item1{position:relative;top:55vh;left:50vh;scale:0.05;transition:3s}
 .panel{background:rgba(0,0,0,0.75);padding:5px 15px;border-radius:10px;margin:2px 0}
 .bar{height:14px;background:#333;border-radius:8px;overflow:hidden}
@@ -36,6 +37,7 @@ padding:5px}
 <div id="choice"></div>
 <div id="logtxt" class="panel"></div>
 <img id="slde" src="game/ball.webp">
+<img id="thund" src="game/thund.webp">
 <img id="item1" src="game/crys1.png" onclick='gainExp(30);logf("Ты очищаешь заражённый символ.");itm1.style.display="none"'>
 </div>
 
@@ -111,6 +113,7 @@ enemyHp-=25+player.level*5;
 if(enemyHp<=0){victory()} else{enemyTurn()} }
 
 function heavySpell(){if(player.mp<30){logf("Недостаточно маны.");return}
+document.getElementById("thund").style.display="block";setTimeout(hide,1000);
 player.mp-=30;enemyHp-=60;player.corruption+=2;
 if(enemyHp<=0){victory()} else{enemyTurn()}updateUI()}
 
@@ -133,5 +136,7 @@ clearChoices(); changeBg("game/bad.jpg");
 addChoice("Начать заново",()=>location.reload())}
 updateUI();chooseClass();
 
-function hide(){document.getElementById("slde").style.display="none";itm1.style.transform="scale(0.05)"}
+function hide(){document.getElementById("slde").style.display="none";
+document.getElementById("thund").style.display="none";
+itm1.style.transform="scale(0.05)"}
 </script></body></html>
