@@ -13,6 +13,7 @@ button:hover{transform:scale(1.05);background:#7b2cbf}
 padding:5px}
 #slde{width:100%;height:75vh;object-fit:fill;display:none}
 #thund{width:100%;height:75vh;object-fit:fill;display:none}
+#item2{position:relative;top:45vh;left:50vh;scale:0.05;transition:3s}
 #item1{position:relative;top:55vh;left:50vh;scale:0.05;transition:3s}
 .panel{background:rgba(0,0,0,0.75);padding:5px 15px;border-radius:10px;margin:2px 0}
 .bar{height:14px;background:#333;border-radius:8px;overflow:hidden}
@@ -23,8 +24,7 @@ padding:5px}
 .exp{background:#ffd700}
 </style></head><body>
 	
-<div id="bg"></div>
-<div id="ui">
+<div id="bg"></div><div id="ui">
 <div class="panel">
 <div>❤️ HP <b style="float:right">📊 Уровень: <span id="lvl"></span> | 💰 Золото: <span id="gold"></span></b>
 <div class="bar"><div id="hp" class="inner hp"></div></div></div>
@@ -39,6 +39,7 @@ padding:5px}
 <img id="slde" src="game/ball.webp">
 <img id="thund" src="game/thund.webp">
 <img id="item1" src="game/crys1.png" onclick='gainExp(30);logf("Ты очищаешь заражённый символ.");itm1.style.display="none"'>
+<img id="item2" src="game/crys2.png" onclick='gainExp(30);logf("Ты очищаешь заражённый символ.");itm2.style.display="none"'>
 </div>
 
 <script>
@@ -47,7 +48,7 @@ let choices=document.getElementById("choice");
 let loga=document.getElementById("logtxt");
 let story=document.getElementById("stor");
 let itm1=document.getElementById("item1");
-
+let itm2=document.getElementById("item2");
 function updateUI(){lvl.innerText=player.level;
 gold.innerText=player.gold;
 hp.style.width=(player.hp/player.maxHp*100)+"%";
@@ -100,7 +101,9 @@ if(r==0){battle("game/bt1.jpg","Теневой дух",100,20,false); return}
 if(r==1){player.gold+=15;logf("Ты находишь тёмные монеты.")}
 if(r==2){player.energy-=20;logf("Шёпот сводит тебя с ума.")}
 if(r==3){}
-if(it==1&&r!=0){itm1.style.transform="scale(20)";setTimeout(hide,3000)}
+if(it==1&&r!=0){if(r==1)itm1.style.transform="scale(20)";
+if(r==2)itm2.style.transform="scale(20)";
+setTimeout(hide,3000)}
 addChoice("Вернуться",cityHub);updateUI()}
 
 function battle(bgbt,name,enemyHp,damage,boss=false){
@@ -138,5 +141,5 @@ updateUI();chooseClass();
 
 function hide(){document.getElementById("slde").style.display="none";
 document.getElementById("thund").style.display="none";
-itm1.style.transform="scale(0.05)"}
+itm1.style.transform="scale(0.05)";itm2.style.transform="scale(0.05)"}
 </script></body></html>
