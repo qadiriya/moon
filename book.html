@@ -3,7 +3,7 @@
 <meta charset="UTF-8">	
 <title>Марго ищет котенка</title><style>
 html{font-size:calc(10px + 0.5vw + 0.5vmax);}	
-body{margin:0;font-family:sans-serif;background-image:linear-gradient(to top,red,black);color:#e6e6e6;width:100vw}
+body{margin:0;font-family:sans-serif;background-image:linear-gradient(to bottom,red,black);color:#e6e6e6;width:100%}
 button{font-size:1rem;padding:5px;margin:2px;border:none;border-radius:8px;
 cursor:pointer;background:#5a189a;color:white;transition:0.2s}
 button:hover{transform:scale(1.05);background:#7b2cbf}
@@ -11,11 +11,12 @@ button:hover{transform:scale(1.05);background:#7b2cbf}
 #bg{position:fixed;inset:12rem 0 0 0;background-size:cover;background-position:center;transition:0.5s}
 #ui{position:relative;z-index:2;margin:auto;
 padding:5px}
+#logtxt{color:red;font-weight:bold}
 #slde{width:100%;height:75vh;object-fit:fill;display:none}
 #thund{width:100%;height:75vh;object-fit:fill;display:none}
 .item{position:relative;display:block;scale:0.05;transition:3s}
-.panel{background:rgba(0,0,0,0.75);padding:5px 15px;border-radius:10px;margin:auto}
-.bar{height:14px;background:#333;border-radius:8px;overflow:hidden}
+.panel{background:rgba(0,0,0,0.75);padding:5px 15px;border-radius:10px;margin:2px auto}
+.bar{height:9px;background:#333;border-radius:8px;overflow:hidden}
 .inner{height:100%;transition:0.4s}
 .hp{background:#ff4d6d}
 .mp{background:#4da6ff}
@@ -61,7 +62,6 @@ function addChoice(text,action){let btn=document.createElement("button");btn.tex
 btn.onclick=action;choices.appendChild(btn)}
 
 function clearChoices(){choices.innerHTML="";loga.innerHTML="";}
-function logf(msg){loga.innerHTML=msg;}
 function rand(n){return Math.floor(Math.random()*n);}
 function changeBg(url){bg.style.backgroundImage=`url(${url})`;}
 
@@ -69,7 +69,7 @@ function gainExp(x){player.exp+=x;
 if(player.exp>=player.nextExp){player.exp=0;player.level++;
 player.maxHp+=25;player.maxMp+=15;player.hp=player.maxHp;
 player.mp=player.maxMp;player.nextExp+=75;
-logf("Ты стала сильнее... Но тьма тоже растёт."); changeBg("game/bg-pw.jpg");for(i=1;i<5;i++)itm[i].style.display="block"} updateUI()}
+loga.innerHTML="Ты стала сильнее... Но тьма тоже растёт."; changeBg("game/bg-pw.jpg");for(i=1;i<5;i++)itm[i].style.display="block"} updateUI()}
 
 function chooseClass(){changeBg("game/bg0.jpg");
 story.innerHTML="Выбери путь магии. В этом городе свет не всегда побеждает тьму.";
@@ -90,7 +90,7 @@ addChoice("Исследовать город",cityHub);updateUI()}
 function cityHub(){changeBg("game/bg2.jpg");
 story.innerHTML="Тьма сгущается. Куда отправиться?";
 clearChoices();
-addChoice("Башня магов",()=>explore(0,"game/bg-mag.jpg","Башня магов"));
+addChoice("Башня магов",()=>explore(0,"game/bg-mag.jpg","Башню магов"));
 addChoice("Заражённый парк",()=>explore(1,"game/bg-park.jpg","Парк"));
 addChoice("Порт теней",()=>explore(0,"game/bg-port.jpg","Порт"));
 addChoice("Подземный разлом",()=>battle("game/bt2.jpg","Страж Разлома",200,30,true))}
@@ -99,8 +99,8 @@ function explore(it,bgpl,place){changeBg(bgpl);
 story.innerHTML="Ты входишь в "+place+". Воздух холодный и странный.";
 clearChoices(); let r=rand(5);
 if(r==0){battle("game/bt1.jpg","Теневой дух",100,20,false); return}
-if(r==1){player.gold+=15;logf("Ты находишь тёмные монеты.")}
-if(r==2){player.energy-=20;logf("Шёпот сводит тебя с ума.")}
+if(r==1){player.gold+=15;loga.innerHTML="Ты находишь тёмные монеты."}
+if(r==2){player.energy-=20;loga.innerHTML="Шёпот сводит тебя с ума."}
 if(r==3){}
 if(it==1&&r!=0){itm[r].style.transform="scale(20)";
 itm[r].style.left=rand(45)+"vh";itm[r].style.top=rand(50)+"vh";
@@ -111,17 +111,17 @@ function battle(bgbt,name,enemyHp,damage,boss=false){
 story.innerHTML="⚔ Бой: "+name;
 clearChoices(); changeBg(bgbt);
 function enemyTurn(){player.hp-=damage;
-if(player.hp<=0){endingBad()} updateUI()}
+if(player.hp<=0)endingBad();updateUI()}
 function attack(){document.getElementById("slde").style.display="block";setTimeout(hide,1500);
 enemyHp-=25+player.level*5;
-if(enemyHp<=0){victory()} else{enemyTurn()} }
+if(enemyHp<=0)setTimeout(victory,1000);else enemyTurn()}
 
-function heavySpell(){if(player.mp<30){logf("Недостаточно маны.");return}
+function heavySpell(){if(player.mp<30){loga.innerHTML="Недостаточно маны.";return}
 document.getElementById("thund").style.display="block";setTimeout(hide,1000);
 player.mp-=30;enemyHp-=60;player.corruption+=2;
 if(enemyHp<=0){victory()} else{enemyTurn()}updateUI()}
 
-function heal(){if(player.mp<20){logf("Недостаточно маны.");return}
+function heal(){if(player.mp<20){loga.innerHTML="Недостаточно маны.";return}
 player.mp-=20;player.hp+=40;
 if(player.hp>player.maxHp) player.hp=player.maxHp;
 enemyTurn();updateUI()}
@@ -143,5 +143,5 @@ updateUI();chooseClass();
 function hide(){document.getElementById("slde").style.display="none";
 document.getElementById("thund").style.display="none";
 for(i=1;i<5;i++)itm[i].style.transform="scale(0.05)"}
-function clean(ii){itm[ii].style.display="none";gainExp(30);logf("Ты очищаешь заражённый символ.")}
+function clean(ii){itm[ii].style.display="none";gainExp(30);loga.innerHTML="Ты очищаешь заражённый символ."}
 </script></body></html>
