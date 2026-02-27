@@ -48,7 +48,7 @@ let player={level:1,exp:0,nextExp:100,hp:120,maxHp:120,mp:80,maxMp:80,energy:100
 let choices=document.getElementById("choice");
 let loga=document.getElementById("logtxt");
 let story=document.getElementById("stor");
-let itm=["",document.getElementById("item1"),document.getElementById("item2"),document.getElementById("item3"),document.getElementById("item4")];
+let itm=["",document.getElementById("item1"),document.getElementById("item2"),document.getElementById("item3"),document.getElementById("item4")];let blocked = false;
 
 function updateUI(){lvl.innerText=player.level;
 gold.innerText=player.gold;
@@ -127,7 +127,7 @@ if(player.hp>player.maxHp) player.hp=player.maxHp;
 enemyTurn();updateUI()}
 
 function victory(){gainExp(boss?150:60);player.gold+=boss?50:20;
-if(boss){story.innerHTML="Ты разрушила разлом... но чувствуешь, как тьма коснулась души.";alert(boss);
+if(boss){story.innerHTML="Ты разрушила разлом... но чувствуешь, как тьма коснулась души.";
 player.chapter=2}
 else story.innerHTML=name+" повержен.";clearChoices();changeBg("game/bg-pw.jpg");addChoice("Продолжить",cityHub)}
 
