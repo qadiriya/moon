@@ -42,7 +42,7 @@ button:hover{transform:scale(1.05);background:#7b2cbf}
 <img id="item4" class="item" src="game/crys4.png" onclick="clean(4)"></div>
 
 <script>
-let player={level:1,exp:0,nextExp:100,hp:120,maxHp:120,mp:80,maxMp:80,energy:100,gold:25,class:"",chapter:1,corruption:0};
+let player={level:1,exp:0,nextExp:100,hp:120,maxHp:120,mp:80,maxMp:80,energy:100,gold:25,chapter:0,corruption:0};
 let choices=document.getElementById("choice");
 let loga=document.getElementById("logtxt");
 let story=document.getElementById("stor");
@@ -69,23 +69,21 @@ player.mp=player.maxMp;player.nextExp+=75;
 story.innerHTML="Ты стала сильнее... Но тьма тоже растёт."; changeBg("game/bg-pw.jpg");for(i=1;i<5;i++)itm[i].style.display="block"} updateUI()}
 
 function chooseClass(){changeBg("game/bg0.jpg");
-story.innerHTML="Выбери путь магии. В этом городе свет не всегда побеждает тьму.";
-clearChoices();
-
-addChoice("✨ Маг света",()=>{player.class="Свет";
-player.maxHp+=40;player.hp=player.maxHp;startGame()});
-addChoice("🌙 Ведьма луны",()=>{player.class="Луна";
+story.innerHTML="Выбери путь магии. В этом городе свет не всегда побеждает тьму.";clearChoices();
+addChoice("✨ Маг света",()=>{player.chapter=0;player.maxHp+=40;player.hp=player.maxHp;startGame()});
+addChoice("🌙 Ведьма луны",()=>{player.chapter=1;
 player.maxMp+=40;player.mp=player.maxMp;startGame()});
-addChoice("🔥 Пламя бездны",()=>{player.class="Огонь";
+addChoice("🔥 Пламя бездны",()=>{player.chapter=2;
 player.corruption+=5;startGame();})}
 
 function startGame(){changeBg("game/bg1.jpg");
-story.innerHTML=txt[0];
+story.innerHTML=txt[player.chapter][0];
 clearChoices();
 addChoice("Исследовать город",cityHub);updateUI()}
 
 function cityHub(){changeBg("game/bg2.jpg");
-story.innerHTML=txt[player.level];
+if(txt[player.chapter][player.level])story.innerHTML=txt[player.chapter][player.level];
+else story.innerHTML="Продолжение следует… 🔜";
 clearChoices();
 addChoice("Башня магов",()=>explore(0,"game/bg-mag.jpg",txt1));
 addChoice("Заражённый парк",()=>explore(1,"game/bg-park.jpg",txt2));
@@ -93,7 +91,8 @@ addChoice("Порт теней",()=>explore(0,"game/bg-port.jpg",txt3));
 addChoice("Подземный разлом",()=>battle("game/bt2.jpg","Страж Разлома",200,30,true))}
 
 function explore(it,bgpl,place){changeBg(bgpl);
-story.innerHTML=place?.[player.level]||"🔜";
+if(place[player.chapter][player.level])story.innerHTML=place[player.chapter][player.level];
+else story.innerHTML=place[player.chapter][0];
 
 clearChoices(); let r=rand(5);
 if(r==0){battle("game/bt1.jpg","Теневой дух",100,20,false); return}
