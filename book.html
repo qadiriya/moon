@@ -14,6 +14,7 @@ button:hover{transform:scale(1.05);background:#7b2cbf}
 #logtxt{color:red;font-weight:bold}
 #stor{font-weight:bold;background:rgba(0,0,0,0.5);display:inline-block}
 #mgbl{display:none}
+#coin{position:absolute;display:none}
 .sld{width:100%;height:77vh;object-fit:fill;display:none}
 .item{position:absolute;top:0;left:0;display:block;scale:0.05;transition:2s}
 .panel{background:rgba(0,0,0,0.75);padding:5px 15px;border-radius:10px;margin:2px auto}
@@ -42,6 +43,7 @@ button:hover{transform:scale(1.05);background:#7b2cbf}
 <img id="item3" class="item" src="game/crys3.png" onclick="clean(item3)">
 <img id="item4" class="item" src="game/crys4.png" onclick="clean(item4)">
 <img id="mgbl" src="game/magic.webp" onclick="mbl()">
+<img id="coin" src="game/coin.webp" onclick="con()">
 </div>
 
 <script>
@@ -59,6 +61,7 @@ btn.onclick=action;choice.appendChild(btn)}
 function clearChoices(){choice.innerHTML="";logtxt.innerHTML=""}
 function rand(n){return Math.floor(Math.random()*n)}
 function mbl(){stor.innerHTML="♒️"+mb[rand(mb.length)]+"♒️"}
+function con(){pl.gold+=15;logtxt.innerHTML="Ты находишь тёмные монеты.";updateUI()}
 function changeBg(url){bg.style.backgroundImage=`url(${url})`}
 
 function gainExp(x){pl.exp+=x;
@@ -83,21 +86,21 @@ function cityHub(){changeBg("game/bg2.jpg");
 if(txt[pl.ch][pl.lv])stor.innerHTML=txt[pl.ch][pl.lv];
 else stor.innerHTML="Продолжение следует… 🔜";
 clearChoices();
-addChoice("Башня магов",()=>explore(2,"game/bg-mag.jpg",txt1));
-addChoice("Парк мертвых",()=>explore(1,"game/bg-park.jpg",txt2));
-addChoice("Порт теней",()=>explore(0,"game/bg-port.jpg",txt3));
-addChoice("Подземный разлом",()=>battle("game/bt2.jpg","Страж Разлома",200,30,true))}
+addChoice("Башня магов",()=>explore(1,"game/bg-mag.jpg",txt1));
+addChoice("Парк мертвых",()=>explore(2,"game/bg-park.jpg",txt2));
+addChoice("Порт теней",()=>explore(3,"game/bg-port.jpg",txt3));
+addChoice("Подземный разлом",()=>explore(4,"game/bg-rift.jpg",txt4))}
 
 function explore(it,bgpl,place){changeBg(bgpl);
 if(place[pl.ch][pl.lv])stor.innerHTML=place[pl.ch][pl.lv];
 else stor.innerHTML=place[pl.ch][0];
 clearChoices(); let r=rand(5);
-if(r==0){battle("game/bt1.jpg","Теневой дух",100,20,false); return}
-if(r==1){pl.gold+=15;logtxt.innerHTML="Ты находишь тёмные монеты."}
-if(r==2){pl.energy-=20;logtxt.innerHTML="Шёпот сводит тебя с ума."}
-if(r==3){}
-if(it==1&&r!=0){window['item'+r].style.transform="scale(20)";window['item'+r].style.left=rand(45)+"vh";window['item'+r].style.top=rand(48)+22+"vh";setTimeout(()=>window['item'+r].style.transform="scale(0.05)",2000)}
-if(it==2&&r!=0){mgbl.style.display="block";setTimeout(()=>mgbl.style.display="none",2000)}
+if(r==0&&it!=4){battle("game/bt1.jpg","Теневой дух",100,20,false); return}
+if(r==0&&it==4){battle("game/bt2.jpg","Страж Разлома",200,30,true);return}
+if(r==2&&it==3){pl.energy-=20;logtxt.innerHTML="Шёпот сводит тебя с ума."}
+if(it==2&&r!=0){window['item'+r].style.transform="scale(20)";window['item'+r].style.left=rand(45)+"vh";window['item'+r].style.top=rand(48)+22+"vh";setTimeout(()=>window['item'+r].style.transform="scale(0.05)",2000)}
+if(it==4&&r!=0){coin.style.left=rand(45)+"vh";coin.style.top=rand(48)+22+"vh";coin.style.display="block";setTimeout(()=>coin.style.display="none",1000)}
+if(it==1&&r!=0){mgbl.style.display="block";setTimeout(()=>mgbl.style.display="none",2000)}
 addChoice("❮❮❮❮ ️❮❮❮❮ ",cityHub);updateUI()}
 
 function battle(bgbt,name,enemyHp,damage,boss=false){
