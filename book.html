@@ -10,6 +10,7 @@
 <link rel="preload" as="image" href="game/bg-rift.jpg">
 <link rel="preload" as="image" href="game/bt1.jpg">
 <link rel="preload" as="image" href="game/bt2.jpg">
+<link rel="preload" as="image" href="game/bg-pw1.jpg">
 <title>Марго ищет котенка</title><style>
 html{font-size:calc(10px + 0.5vw + 0.5vmax)}	
 body{margin:0;font-family:sans-serif;background-image:linear-gradient(to bottom,red,black);color:#ffffff}
@@ -17,7 +18,7 @@ button{font-size:1rem;padding:9px 5px;margin:2px;border:none;border-radius:8px;
 cursor:pointer;background:#5a189a;color:white;transition:0.2s}
 button:hover{transform:scale(1.05);background:#7b2cbf}
 
-#bg{position:fixed;inset:9rem 0 0 0;background-size:cover;background-position:center;transition:0.5s}
+#bg{position:fixed;inset:9rem 0 0 0;background-size:cover;background-position:center;transition:0.5s;background-image:url("game/bg0.jpg")}
 #ui{position:relative;margin:auto;padding:5px;}
 #logtxt{color:red;font-weight:bold}
 #stor{font-weight:bold;background:rgba(0,0,0,0.5);display:inline-block}
@@ -78,7 +79,7 @@ pl.maxHp+=25;pl.maxMp+=15;pl.hp=pl.maxHp;
 pl.mp=pl.maxMp;pl.nextExp+=75;
 stor.innerHTML="Ты стала сильнее... Но тьма тоже растёт."; changeBg("game/bg-pw1.jpg");for(i=1;i<5;i++)window['item'+i].style.display="block"}updateUI()}
 
-function chooseClass(){changeBg("game/bg0.jpg");
+function chooseClass(){
 stor.innerHTML="Выбери путь магии. В этом городе свет не всегда побеждает тьму.";clearChoices();
 addChoice("✨ Маг света",()=>{pl.ch=0;pl.maxHp+=40;pl.hp=pl.maxHp;startGame()});
 addChoice("🌙 Ведьма луны",()=>{pl.ch=1;
