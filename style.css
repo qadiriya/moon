@@ -25,7 +25,7 @@ h1{position:absolute;top:25%;left:50%;transform:translate(-50%,-50%);-ms-transfo
 
 .upbtn{position:absolute;right:0;bottom:-1rem;font-size:1.2rem;padding:0 0.5rem;background-color:#ffffff;box-shadow:3px 3px 5px #aaaaaa;border-radius:4px}
 
-.foo{text-align:center;width:99%;padding:0.4rem 0;font-size:0.7rem;white-space:nowrap;background-color:#cccccc;background-image:linear-gradient(to right,#ffffff,10%,#bbbbbb,90%,#ffffff)}
+.foo{text-align:center;padding:0.4rem 0;font-size:0.7rem;white-space:nowrap;background-color:#ccc;background-image:linear-gradient(to bottom right,#ddd 20%,#cc0000)}
 
 /* Slider */ #slider{ width:100%; height:100%; position:relative; overflow:hidden; } @keyframes load{ from{left:-100%;} to{left:0;} } .slides{ width:500%; height:100%; position:relative; -webkit-animation:slide 30s infinite; -moz-animation:slide 30s infinite; animation:slide 30s infinite; } .slider{ width:20%; height:100%; float:left; position:relative; z-index:1; overflow:hidden; }
 /* Contents */ .content-txt{color:#ffffff;font-size:1rem;margin-left:1rem;width:50%;max-width:450px;bottom:2rem;float:left;position:absolute; -webkit-animation:content-s 6s infinite; -moz-animation:content-s 6s infinite; animation:content-s 6s infinite; } 
